@@ -34,8 +34,12 @@ def results_page():
 
         article_data = get_article_data(language, title)
 
-        if 'page_image_free' in article_data['pageprops']:
-            page_image_url = "https://upload.wikimedia.org/wikipedia/commons/f/f3/" + article_data['pageprops']['page_image_free']
+        if 'thumbnail' in article_data:
+            thumbnail_source = article_data['thumbnail']['source']
+            url_list = thumbnail_source.split('/')[:-1]
+            url_list.remove('thumb')
+            full_size_source = '/'.join(url_list)
+            page_image_url = full_size_source
         else:
             page_image_url = None
         # TODO: Fix when page_image_free is present but it's a local file. Check it resolves?

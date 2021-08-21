@@ -13,7 +13,7 @@ def get_article_data(language, title):
     params = {
         "action": "query",
         "titles": title,
-        "prop": "pageprops|revisions",
+        "prop": "pageprops|revisions|pageimages",
         "format": "json",
         "rvprop": "timestamp|user|comment|tags",
         "rvlimit": "1",

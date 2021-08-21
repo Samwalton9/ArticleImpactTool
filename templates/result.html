@@ -58,6 +58,8 @@
                         <div class="tab-body">
                           {% if num_linked_pages == 0 %}
                               It looks like no other pages are linked to this one, so we couldn't find translated articles.
+                          {% elif num_translated_articles == 0 %}
+                              This article exists in {{ num_linked_pages }} other languages, but none were created with ContentTranslation.
                           {% else %}
                               {# TODO: Fix plural/singular. #}
                               <div class="tab-note">
