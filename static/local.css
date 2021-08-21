@@ -12,3 +12,25 @@
     text-align: center;
     font-size: smaller;
 }
+
+.divider {
+    border-right: lightgray;
+    border-right-width: 1px;
+    border-right-style: solid;
+    padding-top: 2em;
+}
+
+.results-body {
+    padding-top: 3em;
+}
+
+.sidebar {
+    padding-right: 1em;
+}
+
+.sidebar-content {
+    border-bottom: gray;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    margin-bottom: 1em;
+}

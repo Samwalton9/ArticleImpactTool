@@ -1,2 +1,52 @@
-{{ language }}
-{{ title }}
+<html lang="en">
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+        <link rel="stylesheet" href="../static/local.css">
+        <title>
+            Wikipedia Article Impact Tool - {{ title }}
+        </title>
+    </head>
+    <body>
+        <nav class="navbar navbar-light bg-light">
+            <h1 class="navbar-brand">Wikipedia Article Impact Tool</h1>
+            <form class="form-inline" method="POST">
+                <div class="row">
+                    <div class="col-2">
+                        <label for="languageSelector">Language</label>
+                        <input type="text" class="form-control" id="languageSelector" name="language" value="{{ language }}">
+                    </div>
+                    <div class="col-7">
+                        <label for="articleTitle">Article title</label>
+                        <input type="text" class="form-control" id="articleTitle" name="title" value="{{ title }}">
+                    </div>
+                    <div class="col-1" style="margin-top:23px">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </nav>
+        <div class="container results-body">
+            <div class="row">
+                <div class="col-3 divider">
+                    <div class="sidebar">
+                        <div class="sidebar-content">
+                            <h2>{{ title }}</h2>
+                            <img src="{{ page_image_url }}" style="max-width:100%; max-height:100%">
+                            <p>Article textual excerpt from the lead of the article, finishing in ...</p>
+                        </div>
+                        <div class="sidebar-data">
+                            <ul style="list-style-type:none;">
+                            <li><b>Creation date:</b> [Date]</li>
+                            <li><b>First editor:</b> [Name]</li>
+                            <li><b>Wikidata ID:</b> <a href="https://www.wikidata.org/wiki/{{ wikidata_id }}">{{ wikidata_id }}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-9">
+                    Module content.
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

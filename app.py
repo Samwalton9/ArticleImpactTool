@@ -1,8 +1,9 @@
+from helpers import construct_query_string
+from modules.wikipedia import get_article_data
+
 from yaml import safe_load
 
 from flask import Flask, render_template, request, redirect, url_for
-from flask_wtf import FlaskForm
-from wtforms import StringField, validators
 
 app = Flask(__name__)
 
@@ -15,9 +16,7 @@ app.config['SECRET_KEY'] = secrets['secret_key']
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
     if request.method == 'POST':
-        language = request.form.get('language')
-        article_title = request.form.get('title')
-        query_string = f"?lang={language}&title={article_title}"
+        query_string = construct_query_string(request.form)
         return redirect(url_for('results_page') + query_string)
     else:
         return render_template('homepage.html')
@@ -25,9 +24,25 @@ def homepage():
 
 @app.route('/result', methods=['GET', 'POST'])
 def results_page():
-    language = request.args.get('lang')
-    title = request.args.get('title')
-    return render_template('result.html', language=language, title=title)
+    if request.method == 'POST':
+        query_string = construct_query_string(request.form)
+        return redirect(url_for('results_page') + query_string)
+
+    else:
+        language = request.args.get('lang')
+        title = request.args.get('title')
+
+        article_data = get_article_data(language, title)
+
+        page_image_url = "https://upload.wikimedia.org/wikipedia/commons/f/f3/" + article_data['pageprops']['page_image_free']
+
+        context = {'language': language,
+                   'title': article_data['title'],
+                   'wikidata_id': article_data['pageprops']['wikibase_item'],
+                   'page_image_url': page_image_url
+                   }
+
+        return render_template('result.html', **context)
 
 
 if __name__ == '__main__':
