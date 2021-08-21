@@ -45,9 +45,52 @@
                     </div>
                 </div>
                 <div class="col-9">
-                    Module content.
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="translation-tab" data-bs-toggle="tab" data-bs-target="#translation" type="button" role="tab" aria-controls="translation" aria-selected="true">Translations</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="twitter-tab" data-bs-toggle="tab" data-bs-target="#twitter" type="button" role="tab" aria-controls="twitter" aria-selected="false">Twitter</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                      <div class="tab-pane fade show active" id="translation" role="tabpanel" aria-labelledby="translation-tab">
+                        <div class="tab-body">
+                          {% if num_linked_pages == 0 %}
+                              It looks like no other pages are linked to this one, so we couldn't find translated articles.
+                          {% else %}
+                              {# TODO: Fix plural/singular. #}
+                              <div class="tab-note">
+                                This article exists in {{ num_linked_pages }} other languages. <b>{{ num_translated_articles }}</b> were created with the ContentTranslation tool:
+                              </div>
+                              <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Language</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Translation date</th>
+                                        <th scope="col">Translator</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  {% for language, translated_article in translated_articles.items() %}
+                                      <th scope="row">{{ language }}</th>
+                                      <td>{{ translated_article.title }}</td>
+                                      <td>{{ translated_article.page_created }}</td>
+                                      <td>{{ translated_article.creator }}</td>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="twitter" role="tabpanel" aria-labelledby="twitter-tab">
+                          Embedded tweets
+                      </div>
+                    </div>
                 </div>
             </div>
         </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
     </body>
 </html>

@@ -31,3 +31,11 @@
 .sidebar-content {
     margin-bottom: 1em;
 }
+
+.tab-body {
+    padding: 1em;
+}
+
+.tab-note {
+    padding-bottom: 2em;
+}

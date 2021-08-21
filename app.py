@@ -1,5 +1,5 @@
 from helpers import construct_query_string
-from modules.wikipedia import get_article_data
+from modules.wikipedia import get_article_data, get_linked_pages, get_content_translated_pages
 
 from yaml import safe_load
 
@@ -38,6 +38,7 @@ def results_page():
             page_image_url = "https://upload.wikimedia.org/wikipedia/commons/f/f3/" + article_data['pageprops']['page_image_free']
         else:
             page_image_url = None
+        # TODO: Fix when page_image_free is present but it's a local file. Check it resolves?
 
         context = {'language': language,
                    'title': article_data['title'],
@@ -46,6 +47,16 @@ def results_page():
                    'page_created': article_data['revisions'][0]['timestamp'],
                    'creator': article_data['revisions'][0]['user']
                    }
+
+        linked_pages = get_linked_pages(context['wikidata_id'])
+        linked_pages.pop(language + "wiki")  # Remove language entered by the user
+        linked_pages.pop('commonswiki', None)  # Remove commonswiki if present
+        context['num_linked_pages'] = len(linked_pages)
+
+        if len(linked_pages) > 0:
+            translated_articles = get_content_translated_pages(linked_pages)
+            context['translated_articles'] = translated_articles
+            context['num_translated_articles'] = len(translated_articles)
 
         return render_template('result.html', **context)
 
