@@ -42,7 +42,9 @@ def results_page():
         context = {'language': language,
                    'title': article_data['title'],
                    'wikidata_id': article_data['pageprops']['wikibase_item'],
-                   'page_image_url': page_image_url
+                   'page_image_url': page_image_url,
+                   'page_created': article_data['revisions'][0]['timestamp'],
+                   'creator': article_data['revisions'][0]['user']
                    }
 
         return render_template('result.html', **context)

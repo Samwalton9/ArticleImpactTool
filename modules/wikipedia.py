@@ -8,8 +8,11 @@ def get_article_data(language, title):
     params = {
         "action": "query",
         "titles": title,
-        "prop": "pageprops",
-        "format": "json"
+        "prop": "pageprops|revisions",
+        "format": "json",
+        "rvprop": "timestamp|user|comment|tags",
+        "rvlimit": "1",
+        "rvdir": "newer"
     }
 
     result = s.get(url=base_url, params=params)
