@@ -34,7 +34,10 @@ def results_page():
 
         article_data = get_article_data(language, title)
 
-        page_image_url = "https://upload.wikimedia.org/wikipedia/commons/f/f3/" + article_data['pageprops']['page_image_free']
+        if 'page_image_free' in article_data['pageprops']:
+            page_image_url = "https://upload.wikimedia.org/wikipedia/commons/f/f3/" + article_data['pageprops']['page_image_free']
+        else:
+            page_image_url = None
 
         context = {'language': language,
                    'title': article_data['title'],
