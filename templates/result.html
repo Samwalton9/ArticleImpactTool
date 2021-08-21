@@ -55,15 +55,38 @@
                     </ul>
                     <div class="tab-content" id="myTabContent">
                       <div class="tab-pane fade show active" id="translation" role="tabpanel" aria-labelledby="translation-tab">
-                        <div class="tab-body">
-                          {% if num_linked_pages == 0 %}
-                              It looks like no other pages are linked to this one, so we couldn't find translated articles.
-                          {% elif num_translated_articles == 0 %}
-                              This article exists in {{ num_linked_pages }} other languages, but none were created with ContentTranslation.
-                          {% else %}
-                              {# TODO: Fix plural/singular. #}
+                        <div class="tab-body wikipedia-tab-body">
+                            Loading ...
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="twitter" role="tabpanel" aria-labelledby="twitter-tab">
+                          Embedded tweets
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+    <script>
+        $(function() {
+            if ({{ num_linked_pages }} > 0) {
+                var api_url = '/get_translations?wikidata_id=' + '{{ wikidata_id }}'
+                $.ajax({
+                    url: api_url,
+                    dataSrc: 'data',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: $('form').serialize(),
+                    success: function(data){
+                        if ($.isEmptyObject(data)) {
+                            $(".wikipedia-tab-body").html(
+                                'This article exists in {{ num_linked_pages }} other languages, but none were created with ContentTranslation.')
+                        } else {
+                            var table = `
                               <div class="tab-note">
-                                This article exists in {{ num_linked_pages }} other languages. <b>{{ num_translated_articles }}</b> were created with the ContentTranslation tool:
+                                This article exists in {{ num_linked_pages }} other languages. The following articles were created with the ContentTranslation tool:
                               </div>
                               <table class="table table-striped">
                                 <thead>
@@ -75,26 +98,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                  {% for language, translated_article in translated_articles.items() %}
-                                      <th scope="row">{{ language }}</th>
-                                      <td><a href="{{ translated_article.url }}">{{ translated_article.title }}</a></td>
-                                      <td><a href="{{ translated_article.first_revision_url }}">{{ translated_article.page_created }}</a></td>
-                                      <td><a href="https://{{ language }}.wikipedia.org/wiki/User:{{ translated_article.creator }}">{{ translated_article.creator }}</a></td>
-                                  {% endfor %}
+                            `;
+                            for (var lang in data){
+                                var obj = data[lang];
+                                table += '<tr>'
+                                table += '<th scope="row">' + lang + '</td>';
+                                table += '<td><a href="' + obj.url + '">' + obj.title + '</a></td>';
+                                table += '<td><a href="' + obj.first_revision_url + '">' + obj.page_created + '</a></td>';
+                                table += '<td><a href="https://' + lang + '.wikipedia.org/wiki/User:' + obj.creator + '">' + obj.creator + '</a></td>';
+                                table += '</tr>'
+                            }
+                            table += `
                                 </tbody>
-                              </table>
-                          {% endif %}
+                            </table>
                             <i>This data is collected by looking for pages linked to this one on Wikidata which were created with the 'contenttranslation' tag.
-                                Results in this table may not have been translated from this language, and other pages might have been translated without the use of ContentTranslation.</i>
-                        </div>
-                      </div>
-                      <div class="tab-pane fade" id="twitter" role="tabpanel" aria-labelledby="twitter-tab">
-                          Embedded tweets
-                      </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+                            Results in this table may not have been translated from this language, and other pages might have been translated without the use of ContentTranslation.</i>
+                            `;
+                            $(".wikipedia-tab-body").html(
+                                table
+                            )
+                        }
+                    }
+                })
+            } else {
+                $(".wikipedia-tab-body").html(
+                    "It looks like no other pages are linked to this one, so we couldn't find any translated articles.")
+            }
+        });
+    </script>
     </body>
 </html>

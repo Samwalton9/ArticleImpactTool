@@ -56,20 +56,21 @@ def get_content_translated_pages(sitelinks):
     # TODO: Limit to pages created _after_ the searched page.
     translated_articles = {}
     for project in sitelinks:
-        language = sitelinks[project]['site'][:-4]
-        title = sitelinks[project]['title']
+        if project.endswith('wiki'):  # Only Wikipedias
+            language = sitelinks[project]['site'][:-4]
+            title = sitelinks[project]['title']
 
-        language_url = "https://" + language + ".wikipedia.org/wiki/"
+            language_url = "https://" + language + ".wikipedia.org/wiki/"
 
-        article_data = get_article_data(language, title)
-        tags = article_data['revisions'][0]['tags']
-        if 'contenttranslation' in tags:
-            translated_articles[language] = {
-                'title': article_data['title'],
-                'page_created': article_data['revisions'][0]['timestamp'],
-                'creator': article_data['revisions'][0]['user'],
-                'url': language_url + article_data['title'].replace(' ','_'),
-                'first_revision_url': language_url + "Special:Diff/" + str(article_data['revisions'][0]['revid'])
-            }
+            article_data = get_article_data(language, title)
+            tags = article_data['revisions'][0]['tags']
+            if 'contenttranslation' in tags:
+                translated_articles[language] = {
+                    'title': article_data['title'],
+                    'page_created': article_data['revisions'][0]['timestamp'],
+                    'creator': article_data['revisions'][0]['user'],
+                    'url': language_url + article_data['title'].replace(' ','_'),
+                    'first_revision_url': language_url + "Special:Diff/" + str(article_data['revisions'][0]['revid'])
+                }
 
     return translated_articles

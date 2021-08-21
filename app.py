@@ -66,13 +66,15 @@ def results_page():
         linked_pages.pop('commonswiki', None)  # Remove commonswiki if present
         context['num_linked_pages'] = len(linked_pages)
 
-        if len(linked_pages) > 0:
-            translated_articles = get_content_translated_pages(linked_pages)
-            context['translated_articles'] = translated_articles
-            context['num_translated_articles'] = len(translated_articles)
-
         return render_template('result.html', **context)
 
+
+@app.route('/get_translations')
+def get_translated_articles():
+    wikidata_id = request.args.get('wikidata_id')
+    linked_pages = get_linked_pages(wikidata_id)
+    translated_articles = get_content_translated_pages(linked_pages)
+    return translated_articles
 
 if __name__ == '__main__':
     app.run()
