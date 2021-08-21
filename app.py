@@ -16,8 +16,11 @@ app.config['SECRET_KEY'] = secrets['secret_key']
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
     if request.method == 'POST':
-        query_string = construct_query_string(request.form)
-        return redirect(url_for('results_page') + query_string)
+        if request.form.get('language') and request.form.get('title'):
+            query_string = construct_query_string(request.form)
+            return redirect(url_for('results_page') + query_string)
+        else:
+            return render_template('homepage.html')
     else:
         return render_template('homepage.html')
 
@@ -25,14 +28,20 @@ def homepage():
 @app.route('/result', methods=['GET', 'POST'])
 def results_page():
     if request.method == 'POST':
-        query_string = construct_query_string(request.form)
-        return redirect(url_for('results_page') + query_string)
+        if request.form.get('language') and request.form.get('title'):
+            query_string = construct_query_string(request.form)
+            return redirect(url_for('results_page') + query_string)
+        else:
+            return render_template('homepage.html')
 
     else:
         language = request.args.get('lang')
         title = request.args.get('title')
 
         article_data = get_article_data(language, title)
+        if "missing" in article_data:
+            # Page doesn't exist, redirect to homepage.
+            return redirect(url_for('homepage'))
 
         if 'thumbnail' in article_data:
             thumbnail_source = article_data['thumbnail']['source']
