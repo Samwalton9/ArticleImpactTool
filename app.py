@@ -32,7 +32,7 @@ def results_page():
             query_string = construct_query_string(request.form)
             return redirect(url_for('results_page') + query_string)
         else:
-            return render_template('homepage.html')
+            redirect(url_for('homepage'))
 
     else:
         language = request.args.get('lang')
