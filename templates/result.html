@@ -37,7 +37,7 @@
                         </div>
                         <div class="sidebar-data">
                             <ul style="list-style-type:none;">
-                            <li><b>Creation date:</b> {{ page_created }}</li>
+                            <li><b>Created:</b> {{ page_created }}</li>
                             <li><b>First editor:</b> <a href="https://{{ language }}.wikipedia.org/wiki/User:{{ creator }}">{{ creator }}</a></li>
                             <li><b>Wikidata ID:</b> <a href="https://www.wikidata.org/wiki/{{ wikidata_id }}">{{ wikidata_id }}</a></li>
                             </ul>
@@ -77,13 +77,15 @@
                                 <tbody>
                                   {% for language, translated_article in translated_articles.items() %}
                                       <th scope="row">{{ language }}</th>
-                                      <td>{{ translated_article.title }}</td>
-                                      <td>{{ translated_article.page_created }}</td>
-                                      <td>{{ translated_article.creator }}</td>
+                                      <td><a href="{{ translated_article.url }}">{{ translated_article.title }}</a></td>
+                                      <td><a href="{{ translated_article.first_revision_url }}">{{ translated_article.page_created }}</a></td>
+                                      <td><a href="https://{{ language }}.wikipedia.org/wiki/User:{{ translated_article.creator }}">{{ translated_article.creator }}</a></td>
                                   {% endfor %}
                                 </tbody>
                               </table>
                           {% endif %}
+                            <i>This data is collected by looking for pages linked to this one on Wikidata which were created with the 'contenttranslation' tag.
+                                Results in this table may not have been translated from this language, and other pages might have been translated without the use of ContentTranslation.</i>
                         </div>
                       </div>
                       <div class="tab-pane fade" id="twitter" role="tabpanel" aria-labelledby="twitter-tab">
