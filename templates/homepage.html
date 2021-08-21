@@ -10,7 +10,7 @@
         <div class="homepage-header">
             <h1>Wikipedia Article Impact Tool</h1>
         </div>
-        <form>
+        <form method="POST">
             <div class="container homepage-form">
                 <div class="row justify-content-md-center">
                     <div class="col-1">
@@ -24,10 +24,10 @@
                 </div>
                 <div class="row justify-content-md-center">
                     <div class="col-1">
-                        <input type="text" class="form-control" id="languageSelector" placeholder="de">
+                        <input type="text" class="form-control" id="languageSelector" placeholder="de" name="language">
                     </div>
                     <div class="col-5">
-                        <input type="text" class="form-control" id="articleTitle">
+                        <input type="text" class="form-control" id="articleTitle" name="title">
                     </div>
                     <div class="col-1">
                         <button type="submit" class="btn btn-primary">Submit</button>
