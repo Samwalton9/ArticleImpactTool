@@ -55,12 +55,14 @@
                     </ul>
                     <div class="tab-content" id="myTabContent">
                       <div class="tab-pane fade show active" id="translation" role="tabpanel" aria-labelledby="translation-tab">
-                        <div class="tab-body wikipedia-tab-body">
+                          <div class="tab-body wikipedia-tab-body">
                             Loading ...
-                        </div>
+                          </div>
                       </div>
                       <div class="tab-pane fade" id="twitter" role="tabpanel" aria-labelledby="twitter-tab">
-                          Embedded tweets
+                          <div class="tab-body twitter-tab-body">
+                              Loading ...
+                          </div>
                       </div>
                     </div>
                 </div>
@@ -72,9 +74,9 @@
     <script>
         $(function() {
             if ({{ num_linked_pages }} > 0) {
-                var api_url = '/get_translations?wikidata_id=' + '{{ wikidata_id }}'
+                var wikipedia_api_url = '/get_translations?wikidata_id=' + '{{ wikidata_id }}'
                 $.ajax({
-                    url: api_url,
+                    url: wikipedia_api_url,
                     dataSrc: 'data',
                     type: 'GET',
                     dataType: 'json',
@@ -124,6 +126,32 @@
                 $(".wikipedia-tab-body").html(
                     "It looks like no other pages are linked to this one, so we couldn't find any translated articles.")
             }
+
+            var twitter_api_url = '/get_tweets?url={{ page_url }}';
+            $.ajax({
+                url: twitter_api_url,
+                dataSrc: 'data',
+                type: 'GET',
+                dataType: 'json',
+                data: $('form').serialize(),
+                success: function(twitterdata){
+                    if (twitterdata.length == undefined){
+                        $(".twitter-tab-body").html(
+                            "No tweets linking to this article from the past 7 days."
+                        )
+                    } else {
+                        var tweets = twitterdata['data'];
+                        var tweet_data = ''
+                        for (var tweetdata in tweets) {
+                            var tweet = tweets[tweetdata];
+                            tweet_data += tweet['text']
+                        }
+                        $(".twitter-tab-body").html(
+                            tweet_data
+                        )
+                    }
+                }
+                })
         });
     </script>
     </body>

@@ -1,6 +1,8 @@
 from helpers import construct_query_string
 from modules.wikipedia import get_article_data, get_linked_pages, get_content_translated_pages
+from modules.twitter import get_recent_tweets
 
+import urllib.parse
 from yaml import safe_load
 
 from flask import Flask, render_template, request, redirect, url_for
@@ -58,7 +60,8 @@ def results_page():
                    'wikidata_id': article_data['pageprops']['wikibase_item'],
                    'page_image_url': page_image_url,
                    'page_created': article_data['revisions'][0]['timestamp'],
-                   'creator': article_data['revisions'][0]['user']
+                   'creator': article_data['revisions'][0]['user'],
+                   'page_url': f'{language}.wikipedia.org/wiki/{urllib.parse.quote(title)}'
                    }
 
         linked_pages = get_linked_pages(context['wikidata_id'])
@@ -75,6 +78,13 @@ def get_translated_articles():
     linked_pages = get_linked_pages(wikidata_id)
     translated_articles = get_content_translated_pages(linked_pages)
     return translated_articles
+
+
+@app.route('/get_tweets')
+def get_tweets():
+    url = request.args.get('url')
+    return get_recent_tweets(url)
+
 
 if __name__ == '__main__':
     app.run()
