@@ -57,7 +57,7 @@ def get_content_translated_pages(sitelinks):
     translated_articles = {}
     for project in sitelinks:
         if project.endswith('wiki'):  # Only Wikipedias
-            language = sitelinks[project]['site'][:-4]
+            language = sitelinks[project]['site'][:-4].replace("_", "-")
             title = sitelinks[project]['title']
 
             language_url = "https://" + language + ".wikipedia.org/wiki/"

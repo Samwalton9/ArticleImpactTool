@@ -135,12 +135,12 @@
                 dataType: 'json',
                 data: $('form').serialize(),
                 success: function(twitterdata){
-                    if (twitterdata.length == undefined){
+                    var tweets = twitterdata['data'];
+                    if (tweets.length == undefined){
                         $(".twitter-tab-body").html(
                             "No tweets linking to this article from the past 7 days."
                         )
                     } else {
-                        var tweets = twitterdata['data'];
                         var tweet_data = ''
                         for (var tweetdata in tweets) {
                             var tweet = tweets[tweetdata];
