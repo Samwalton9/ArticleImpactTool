@@ -45,6 +45,10 @@ def results_page():
             # Page doesn't exist, redirect to homepage.
             return redirect(url_for('homepage'))
 
+        if "pageprops" not in article_data:
+            # Can't get page data for some reason (e.g. redirect)
+            return redirect(url_for('homepage'))
+
         if 'thumbnail' in article_data:
             thumbnail_source = article_data['thumbnail']['source']
             url_list = thumbnail_source.split('/')[:-1]
