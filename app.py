@@ -65,7 +65,7 @@ def results_page():
                    'page_image_url': page_image_url,
                    'page_created': article_data['revisions'][0]['timestamp'],
                    'creator': article_data['revisions'][0]['user'],
-                   'page_url': f'{language}.wikipedia.org/wiki/{urllib.parse.quote(title)}'
+                   'page_url': f'wikipedia.org/wiki/{urllib.parse.quote(title)}'
                    }
 
         linked_pages = get_linked_pages(context['wikidata_id'])
