@@ -59,13 +59,16 @@ def results_page():
             page_image_url = None
         # TODO: Fix when page_image_free is present but it's a local file. Check it resolves?
 
+        pageviews_url = f"https://pageviews.toolforge.org/?project={language}.wikipedia.org&pages={title}"
+
         context = {'language': language,
                    'title': article_data['title'],
                    'wikidata_id': article_data['pageprops']['wikibase_item'],
                    'page_image_url': page_image_url,
                    'page_created': article_data['revisions'][0]['timestamp'],
                    'creator': article_data['revisions'][0]['user'],
-                   'page_url': f'wikipedia.org/wiki/{urllib.parse.quote(title)}'
+                   'page_url': f'wikipedia.org/wiki/{urllib.parse.quote(title)}',
+                   'pageviews_url': pageviews_url
                    }
 
         linked_pages = get_linked_pages(context['wikidata_id'])
